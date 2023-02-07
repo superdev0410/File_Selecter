@@ -21,6 +21,7 @@ def get_args() -> argparse.Namespace:
     subparsers = parser.add_subparsers(dest="command")
     addparser = subparsers.add_parser("add", help="add files to source folder")
     chooseparser = subparsers.add_parser("choose", help="choose files and copy to anohter folder")
+    renameparser = subparsers.add_parser("rename", help="rename files in source folder")
 
     # add arguments to addparser
     addparser.add_argument("files", nargs="+", help="list of filepaths to add")
@@ -97,6 +98,27 @@ def choose(num: int, destination: str):
         name += 1
 
 
+def rename():
+    """
+    rename all files in source folder
+    """
+
+    # get source directory
+    sourcedir = __file__[:-7] + "/Source"
+    # check it is exist or not
+    if not os.path.exists(sourcedir):
+        os.mkdir(sourcedir)
+    # get files in source folder
+    sourcefiles = os.listdir(sourcedir)
+
+    # rename all files
+    for sourcefile in sourcefiles:
+        os.rename(sourcedir + "\\" + sourcefile, sourcedir + "\\" + sourcefile + "_temp")
+    name = 1
+    for sourcefile in sourcefiles:
+        os.rename(sourcedir + "\\" + sourcefile + "_temp", sourcedir + "\\" + str(name) + ".png")
+        name += 1
+
 def main():
     """
     main function
@@ -114,6 +136,10 @@ def main():
             print("Number of files must be integer bigger than 0.")
             return
         choose(args.num, args.destination)
+    
+    elif args.command == "rename":
+        # start rename command
+        rename()
 
 
 if __name__ == "__main__":
