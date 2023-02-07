@@ -4,7 +4,9 @@ main module
 
 import argparse
 import os
+import random
 import shutil
+import sys
 
 
 def get_args() -> argparse.Namespace:
@@ -67,7 +69,32 @@ def choose(num: int, destination: str):
         num (int): number of files to choose
         destination (str): destination folder path
     """
-    pass
+
+    # get source directory
+    sourcedir = __file__[:-7] + "/Source"
+    # check it is exist or not
+    if not os.path.exists(sourcedir):
+        os.mkdir(sourcedir)
+    # get files in source folder
+    sourcefiles = os.listdir(sourcedir)
+
+    # choose files
+    if len(sourcefiles) < num:
+        print("Number of files are smaller than required files")
+        sys.exit()
+    files = random.choices(sourcefiles, k=num)
+
+
+    # remove all files in destination folder
+    dest_files = os.listdir(destination)
+    for file in dest_files:
+        os.remove(destination + "\\" + file)
+
+    # copy files
+    name = 1
+    for file in files:
+        shutil.copy(sourcedir + "\\" + file, destination + "\\" + str(name) + ".png")
+        name += 1
 
 
 def main():
@@ -83,6 +110,9 @@ def main():
 
     elif args.command == "choose":
         # start choose command
+        if args.num <= 0:
+            print("Number of files must be integer bigger than 0.")
+            return
         choose(args.num, args.destination)
 
 
