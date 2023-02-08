@@ -25,6 +25,11 @@ def get_args() -> argparse.Namespace:
 
     # add arguments to addparser
     addparser.add_argument("files", nargs="+", help="list of filepaths to add")
+    addparser.add_argument(
+        "-s", "--source",
+        default="E:\\MyProgram\\File Selecter\\Source",
+        help="source image directory",
+    )
 
     # add arguments to chooseparser
     chooseparser.add_argument(
@@ -38,22 +43,30 @@ def get_args() -> argparse.Namespace:
         help="destination folder path",
         default="E:\\MyProgram\\Screenshot\\Source"
     )
+    chooseparser.add_argument(
+        "-s", "--source",
+        default="E:\\MyProgram\\File Selecter\\Source",
+        help="source image directory",
+    )
+
+    # add argument to renameparser
+    renameparser.add_argument(
+        "-s", "--source",
+        default="E:\\MyProgram\\File Selecter\\Source",
+        help="source image directory",
+    )
 
     return parser.parse_args()
 
 
-def add(filepaths: list):
+def add(filepaths: list, sourcedir: str):
     """add files to source folder
 
     Args:
         filepaths (list): list of files
+        sourcedir (str): path of source directory
     """
 
-    # get source directory
-    sourcedir = __file__[:-7] + "/Source"
-    # check it is exist or not
-    if not os.path.exists(sourcedir):
-        os.mkdir(sourcedir)
     # get number of files in source folder
     size = len(os.listdir(sourcedir))
 
@@ -63,19 +76,15 @@ def add(filepaths: list):
         shutil.copy(filepath, sourcedir + "/" + str(size) + ".png")
 
 
-def choose(num: int, destination: str):
+def choose(num: int, destination: str, sourcedir: str):
     """randomly choose files and copy to destination folder
 
     Args:
         num (int): number of files to choose
         destination (str): destination folder path
+        sourcedir (str): path of source directory
     """
 
-    # get source directory
-    sourcedir = __file__[:-7] + "/Source"
-    # check it is exist or not
-    if not os.path.exists(sourcedir):
-        os.mkdir(sourcedir)
     # get files in source folder
     sourcefiles = os.listdir(sourcedir)
 
@@ -98,9 +107,12 @@ def choose(num: int, destination: str):
         name += 1
 
 
-def rename():
+def rename(sourcedir: str):
     """
     rename all files in source folder
+
+    Args:
+        sourcedir (str): path of source directory
     """
 
     # get source directory
@@ -119,6 +131,7 @@ def rename():
         os.rename(sourcedir + "\\" + sourcefile + "_temp", sourcedir + "\\" + str(name) + ".png")
         name += 1
 
+
 def main():
     """
     main function
@@ -128,18 +141,18 @@ def main():
     args = get_args()
     if args.command == "add":
         # start add command
-        add(args.files)
+        add(args.files, args.source)
 
     elif args.command == "choose":
         # start choose command
         if args.num <= 0:
             print("Number of files must be integer bigger than 0.")
             return
-        choose(args.num, args.destination)
-    
+        choose(args.num, args.destination, args.source)
+
     elif args.command == "rename":
         # start rename command
-        rename()
+        rename(args.source)
 
 
 if __name__ == "__main__":
