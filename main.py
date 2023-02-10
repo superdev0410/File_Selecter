@@ -70,10 +70,17 @@ def add(filepaths: list, sourcedir: str):
     # get number of files in source folder
     size = len(os.listdir(sourcedir))
 
+    print("Start adding...\n")
+
     # copy files to source folder and rename it
     for filepath in filepaths:
         size += 1
-        shutil.copy(filepath, sourcedir + "/" + str(size) + ".png")
+        sourcepath = sourcedir + "/" + str(size) + ".png"
+        shutil.copy(filepath, sourcepath)
+        print(f"Copy '{filepath}' to '{sourcepath}'.")
+
+    print(f"\nSuccessfuly copied {len(filepaths)} images.")
+    print(f"Currently {size} images are in source directory.")
 
 
 def choose(num: int, destination: str, sourcedir: str):
@@ -88,6 +95,8 @@ def choose(num: int, destination: str, sourcedir: str):
     # get files in source folder
     sourcefiles = os.listdir(sourcedir)
 
+    print("Start choosing...\n")
+
     # choose files
     if len(sourcefiles) < num:
         print("Number of files are smaller than required files")
@@ -99,12 +108,18 @@ def choose(num: int, destination: str, sourcedir: str):
     dest_files = os.listdir(destination)
     for file in dest_files:
         os.remove(destination + "\\" + file)
+    print("Removed all files in destination folder")
 
     # copy files
     name = 1
     for file in files:
-        shutil.copy(sourcedir + "\\" + file, destination + "\\" + str(name) + ".png")
+        destinationpath = destination + "\\" + str(name) + ".png"
+        sourcepath = sourcedir + "\\" + file
+        shutil.copy(sourcepath, destinationpath)
+        print(f"Copyied '{sourcepath}' to '{destinationpath}'.")
         name += 1
+
+    print(f"Successfuly copied {num} images to '{destinationpath}'")
 
 
 def rename(sourcedir: str):
@@ -114,15 +129,11 @@ def rename(sourcedir: str):
     Args:
         sourcedir (str): path of source directory
     """
-
-    # get source directory
-    sourcedir = __file__[:-7] + "/Source"
-    # check it is exist or not
-    if not os.path.exists(sourcedir):
-        os.mkdir(sourcedir)
+    
     # get files in source folder
     sourcefiles = os.listdir(sourcedir)
 
+    print("Start renaming...")
     # rename all files
     for sourcefile in sourcefiles:
         os.rename(sourcedir + "\\" + sourcefile, sourcedir + "\\" + sourcefile + "_temp")
@@ -130,6 +141,7 @@ def rename(sourcedir: str):
     for sourcefile in sourcefiles:
         os.rename(sourcedir + "\\" + sourcefile + "_temp", sourcedir + "\\" + str(name) + ".png")
         name += 1
+    print(f"Renamed {name - 1} files.")
 
 
 def main():
