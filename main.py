@@ -70,10 +70,17 @@ def add(filepaths: list, sourcedir: str):
     # get number of files in source folder
     size = len(os.listdir(sourcedir))
 
+    print("Start adding...\n")
+
     # copy files to source folder and rename it
     for filepath in filepaths:
         size += 1
-        shutil.copy(filepath, sourcedir + "/" + str(size) + ".png")
+        sourcepath = sourcedir + "/" + str(size) + ".png"
+        shutil.copy(filepath, sourcepath)
+        print(f"Copy '{filepath}' to '{sourcepath}'.")
+
+    print(f"\nSuccessfuly copied {len(filepaths)} images.")
+    print(f"Currently {size} images are in source directory.")
 
 
 def choose(num: int, destination: str, sourcedir: str):
