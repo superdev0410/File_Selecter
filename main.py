@@ -95,6 +95,8 @@ def choose(num: int, destination: str, sourcedir: str):
     # get files in source folder
     sourcefiles = os.listdir(sourcedir)
 
+    print("Start choosing...\n")
+
     # choose files
     if len(sourcefiles) < num:
         print("Number of files are smaller than required files")
@@ -105,13 +107,19 @@ def choose(num: int, destination: str, sourcedir: str):
     # remove all files in destination folder
     dest_files = os.listdir(destination)
     for file in dest_files:
-        os.remove(destination + "\\" + file)
+        os.remove(destination + "\\" + file)    
+    print("Removed all files in destination folder");
 
     # copy files
     name = 1
     for file in files:
-        shutil.copy(sourcedir + "\\" + file, destination + "\\" + str(name) + ".png")
+        destinationpath = destination + "\\" + str(name) + ".png";
+        sourcepath = sourcedir + "\\" + file
+        shutil.copy(sourcepath, destinationpath)
+        print(f"Copyied '{sourcepath}' to '{destinationpath}'.")
         name += 1
+    
+    print(f"Successfuly copied {num} images to '{destinationpath}'")
 
 
 def rename(sourcedir: str):
