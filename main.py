@@ -129,12 +129,7 @@ def rename(sourcedir: str):
     Args:
         sourcedir (str): path of source directory
     """
-
-    # get source directory
-    sourcedir = __file__[:-7] + "/Source"
-    # check it is exist or not
-    if not os.path.exists(sourcedir):
-        os.mkdir(sourcedir)
+    
     # get files in source folder
     sourcefiles = os.listdir(sourcedir)
 
